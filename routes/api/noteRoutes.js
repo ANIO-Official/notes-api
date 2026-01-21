@@ -8,10 +8,8 @@ router.use(authMiddleware);
 // GET /api/notes - Get all notes for the logged-in user
 // THIS IS THE ROUTE THAT CURRENTLY HAS THE FLAW
 router.get('/', async (req, res) => {
-  // This currently finds all notes in the database.
-  // It should only find notes owned by the logged in user.
   try {
-    const notes = await Note.find({});
+    const notes = await Note.find({owner: req.user._id});
     res.json(notes);
   } catch (err) {
     res.status(500).json(err);
@@ -36,6 +34,11 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     // This needs an authorization check
+    const ownNote = await Note.findOne({_id: req.params.id, owner: req.user._id})
+    if (!ownNote){
+      return res.status(403).send("User is not authorized to update this note.")
+    }
+
     const note = await Note.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!note) {
       return res.status(404).json({ message: 'No note found with this id!' });
