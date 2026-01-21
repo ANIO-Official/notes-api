@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Note } = require('../../models/Note');
+const Note  = require('../../models/Note');
 const { authMiddleware } = require('../../utils/auth');
  
 // Apply authMiddleware to all routes in this file
@@ -27,7 +27,8 @@ router.post('/', async (req, res) => {
     });
     res.status(201).json(note);
   } catch (err) {
-    res.status(400).json(err);
+    console.error("[ Error Creating Note ] ", err)
+    res.status(400).json({message: "Error creating new note."});
   }
 });
  
