@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../../models/User');
+const User  = require('../../models/User');
 const { signToken } = require('../../utils/auth');
  
 // POST /api/users/register - Create a new user
@@ -9,7 +9,8 @@ router.post('/register', async (req, res) => {
     const token = signToken(user);
     res.status(201).json({ token, user });
   } catch (err) {
-    res.status(400).json(err);
+    console.error('[ An Error Occured Creating new User ] ', err)
+    res.status(400).json({error: err.message});
   }
 });
  

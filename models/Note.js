@@ -15,6 +15,11 @@ const noteSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  }
 });
  
 const Note = model('Note', noteSchema);

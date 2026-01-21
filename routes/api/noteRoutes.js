@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
   try {
     const note = await Note.create({
       ...req.body,
-      // The user ID needs to be added here
+      owner: req.user._id
     });
     res.status(201).json(note);
   } catch (err) {
