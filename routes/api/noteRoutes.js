@@ -6,7 +6,6 @@ const { authMiddleware } = require('../../utils/auth');
 router.use(authMiddleware);
  
 // GET /api/notes - Get all notes for the logged-in user
-// THIS IS THE ROUTE THAT CURRENTLY HAS THE FLAW
 router.get('/', async (req, res) => {
   try {
     const notes = await Note.find({owner: req.user._id});
@@ -16,6 +15,22 @@ router.get('/', async (req, res) => {
   }
 });
  
+// GET /api/notes - Get specific note for the logged-in user
+router.get('/:id', async (req, res) => {
+  try {
+    
+    const ownNote = await Note.findOne({_id: req.params.id, owner: req.user._id})
+    if (!ownNote){
+      return res.status(403).send("You are not authorized to view this note.")
+    }
+
+    res.json(ownNote);
+  } catch (err) {
+    res.status(404).json({message: "Could not find note of matching ID."});
+  }
+});
+
+
 // POST /api/notes - Create a new note
 router.post('/', async (req, res) => {
   try {
@@ -36,7 +51,7 @@ router.put('/:id', async (req, res) => {
     // This needs an authorization check
     const ownNote = await Note.findOne({_id: req.params.id, owner: req.user._id})
     if (!ownNote){
-      return res.status(403).send("User is not authorized to update this note.")
+      return res.status(403).send("You are not authorized to update this note.")
     }
 
     const note = await Note.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -52,7 +67,10 @@ router.put('/:id', async (req, res) => {
 // DELETE /api/notes/:id - Delete a note
 router.delete('/:id', async (req, res) => {
   try {
-    // This needs an authorization check
+    const ownNote = await Note.findOne({_id: req.params.id, owner: req.user._id})
+    if (!ownNote){
+      return res.status(403).send("You are not authorized to delete this note.")
+    }
     const note = await Note.findByIdAndDelete(req.params.id);
     if (!note) {
       return res.status(404).json({ message: 'No note found with this id!' });
