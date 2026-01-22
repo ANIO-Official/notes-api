@@ -82,7 +82,7 @@ Follow this format:
 
 ### End points
 ``` JS
-/api/user/register //Post/Create User
+/api/users/register //Post/Create User
 /api/users/login //Post/Login Existing User
 
 /api/notes // Get/Read All Notes or Post/Create Note
