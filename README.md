@@ -8,7 +8,7 @@ A lab study focused on updating the Authorization and Authentication of a pre-ex
 The core focus of this lab is to implement authorization logic to ensure that users can only access and manage the notes they personally own.
 
 ### GitHub Link
-https://github.com/ANIO-Official/innovative-inc-auth
+https://github.com/ANIO-Official/notes-api
 
 ## How to Use
 1.  Clone the repository or Download the ZIP file and extract the files.
